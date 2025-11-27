@@ -39,7 +39,7 @@ jobs:
         username: ${{ secrets.CPANEL_USERNAME }}
         password: ${{ secrets.CPANEL_PASSWORD }}
         port: ${{ secrets.CPANEL_PORT }}
-        server-dir: "/"
+        server-dir: ${{ secrets.CPANEL_PATH }}
         local-dir: "./"
 
         exclude: |
