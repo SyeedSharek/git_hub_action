@@ -10,13 +10,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. Pull project
     - name: Checkout Code
       uses: actions/checkout@v3
 
+    # 2. Setup PHP
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: mbstring, pdo_mysql, bcmath, intl
+        coverage: none
+
+    # 3. Install Composer Dependencies (production only)
     - name: Install Dependencies
       run: composer install --no-dev --optimize-autoloader
 
-    - name: Upload to cPanel via FTP
+    # 4. Build Laravel (config + routes cache)
+    - name: Optimize Laravel
+      run: |
+        php artisan config:clear || true
+        php artisan route:clear || true
+        php artisan view:clear || true
+        php artisan cache:clear || true
+        php artisan config:cache
+        php artisan route:cache
+
+    # 5. Upload files to cPanel
+    - name: Deploy to cPanel via FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.CPANEL_HOST }}
@@ -27,9 +48,12 @@ jobs:
         local-dir: "./"
 
         exclude: |
-          .git*
+          **/.git*
+          **/.github*
+          **/node_modules*
+          **/tests*
+          **/storage/logs/*
+          **/storage/framework/cache/data/*
+          **/vendor/*
           .env
-          .github
-          node_modules
-          vendor
-          public/storage
+
