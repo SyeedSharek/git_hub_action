@@ -60,6 +60,7 @@ class CategoryApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonFragment($updateData);
 
+
         $this->assertDatabaseHas('categories', $updateData);
     }
 
@@ -70,6 +71,7 @@ class CategoryApiTest extends TestCase
         $response = $this->deleteJson('/api/categories/' . $category->id);
 
         $response->assertStatus(204);
+
 
         $this->assertDatabaseMissing('categories', ['id' => $category->id]);
     }
