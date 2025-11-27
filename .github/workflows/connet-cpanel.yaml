@@ -39,8 +39,9 @@ jobs:
         username: ${{ secrets.CPANEL_USERNAME }}
         password: ${{ secrets.CPANEL_PASSWORD }}
         port: ${{ secrets.CPANEL_PORT }}
-        server-dir: ${{ secrets.CPANEL_PATH }}/laravel/
+        server-dir: "/"
         local-dir: "./"
+
         exclude: |
           **/.git*
           **/.github*
