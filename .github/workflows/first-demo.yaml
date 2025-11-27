@@ -24,7 +24,7 @@ jobs:
           echo test, and deploy your project.
 
       - name: List
-        run: ls -la
+        run: ls ${{ github.workspace }}
 
       - name: Print Github context
         env:
